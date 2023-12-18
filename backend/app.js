@@ -18,4 +18,13 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
+// Routes
+import registerRoute from "./routes/register.js";
+import loginRoute from "./routes/login.js";
+import logoutRoute from "./routes/logout.js";
+
+app.use("/register", registerRoute);
+app.use("/login", loginRoute);
+app.use("/logout", logoutRoute);
+
 export default app;
