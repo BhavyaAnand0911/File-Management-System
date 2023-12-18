@@ -1,5 +1,12 @@
+import Login from "./login.jsx";
+import Register from "./register.jsx";
+
 function App() {
-  return <>dfsadsfadsfadfs</>;
+  return (
+    <>
+      <Register />
+    </>
+  );
 }
 
 export default App;
