@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const ErrorBox = ({ message }) => {
+  return (
+    <div className="bg-red-500 text-white p-4 fixed bottom-0 left-0 right-0 text-center">
+      {message}
+    </div>
+  );
+};
+
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
+
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -16,6 +26,7 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
+
   const handleRegister = async () => {
     try {
       const response = await fetch("http://localhost:6500/register", {
@@ -32,12 +43,13 @@ const Register = () => {
         // Handle storing tokens or redirecting to the next page
         navigate("/login");
       } else {
-        console.error("Registration failed:", response.statusText);
-        // Handle error, show a message to the user, etc.
+        const errorMessage = await response.text();
+        setError(errorMessage);
+        console.error("Registration failed:", errorMessage);
       }
     } catch (error) {
+      setError("An unexpected error occurred during registration.");
       console.error("Error during registration:", error);
-      // Handle error, show a message to the user, etc.
     }
   };
 
@@ -104,6 +116,9 @@ const Register = () => {
               Please enter a password.
             </p>
           </div>
+
+          {/* Render the error box conditionally */}
+          {error && <ErrorBox message={error} />}
 
           {/* Button and Forgot Password link */}
           <div className="flex items-center justify-center">

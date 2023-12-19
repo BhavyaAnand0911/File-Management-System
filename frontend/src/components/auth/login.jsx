@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +13,8 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -28,7 +30,7 @@ const Login = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         // Handle storing tokens or redirecting to the next page
-        Navigate("/login");
+        navigate("/home");
       } else {
         console.error("Login failed:", response.statusText);
         // Handle error, show a message to the user, etc.
@@ -102,7 +104,7 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Button and Forgot Password link */}
+          {/* Button and Register link */}
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -110,7 +112,7 @@ const Login = () => {
             >
               Login
             </button>
-            <Link to={"/register"}>Click here to register!</Link>
+            <Link to={"/register"}>Click here to register &rarr;</Link>
           </div>
         </form>
       </div>
