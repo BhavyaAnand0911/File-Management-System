@@ -2,9 +2,9 @@ import express from "express";
 const router = express.Router();
 import User from "../models/user.model.js";
 
-router.get("/", (req, res) => {
-  res.send("Register");
-});
+// router.get("/", (req, res) => {
+//   res.send("Register");
+// });
 router.post("/", async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -16,6 +16,7 @@ router.post("/", async (req, res) => {
     });
 
     await newUser.save();
+    console.log(newUser);
 
     const accessToken = newUser.generateAccessToken();
     const refreshToken = newUser.generateRefreshToken();

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ const Login = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         // Handle storing tokens or redirecting to the next page
+        Navigate("/login");
       } else {
         console.error("Login failed:", response.statusText);
         // Handle error, show a message to the user, etc.
