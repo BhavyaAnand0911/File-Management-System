@@ -46,10 +46,12 @@ const Register = () => {
         const errorMessage = await response.text();
         setError(errorMessage);
         console.error("Registration failed:", errorMessage);
+        // You can choose to handle error state here, show a message to the user, etc.
       }
     } catch (error) {
       setError("An unexpected error occurred during registration.");
       console.error("Error during registration:", error);
+      // You can choose to handle error state here, show a message to the user, etc.
     }
   };
 

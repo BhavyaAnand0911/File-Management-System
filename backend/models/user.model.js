@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema({
 
 // Hashing the password before saving it to the database
 // pre hook will help the function execute just before the data is being saved
-
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password") || user.isNew) {
@@ -32,6 +31,11 @@ userSchema.pre("save", async function (next) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(user.password, salt);
       user.password = hashedPassword;
+
+      // Generate and store the access token
+      const accessToken = user.generateAccessToken();
+      user.accessToken = accessToken;
+
       next();
     } catch (error) {
       return next("Error while encrypting the password", error);
@@ -62,6 +66,7 @@ userSchema.methods.generateAccessToken = function () {
     }
   );
 };
+
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {

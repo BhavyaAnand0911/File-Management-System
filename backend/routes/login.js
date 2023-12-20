@@ -2,9 +2,12 @@ import express from "express";
 const router = express.Router();
 import User from "../models/user.model.js";
 
+// router.get("/", (req, res) => {
+//   res.send("Login");
+// });
 router.post("/", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
     const user = await User.findOne({ username });
 

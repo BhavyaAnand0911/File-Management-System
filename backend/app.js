@@ -22,9 +22,11 @@ app.use(cookieParser());
 import registerRoute from "./routes/register.js";
 import loginRoute from "./routes/login.js";
 import logoutRoute from "./routes/logout.js";
+import deatilsRoute from "./routes/details.js";
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/logout", logoutRoute);
+app.use("/details", deatilsRoute);
 
 export default app;

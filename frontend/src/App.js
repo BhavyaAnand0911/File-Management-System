@@ -4,6 +4,8 @@ import Register from "./components/auth/register.jsx";
 import Login from "./components/auth/login.jsx";
 import Landing from "./components/landing.jsx";
 import Home from "./components/home.jsx";
+import Profile from "./components/profile.jsx";
+import Dashboard from "./components/dashboard.jsx";
 
 const App = () => {
   return (
@@ -13,6 +15,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

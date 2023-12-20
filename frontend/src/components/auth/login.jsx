@@ -4,8 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
+    email: "", // Add the missing email field to the state
     password: "",
   });
+
+  const ErrorBox = ({ message }) => {
+    return (
+      <div className="bg-red-500 text-white p-4 fixed bottom-0 left-0 right-0 text-center">
+        {message}
+      </div>
+    );
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -14,11 +23,13 @@ const Login = () => {
     });
   };
 
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("http://localhost:6500/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,12 +41,16 @@ const Login = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         // Handle storing tokens or redirecting to the next page
+        localStorage.setItem("accessToken", data.accessToken);
         navigate("/home");
       } else {
-        console.error("Login failed:", response.statusText);
+        const errorMessage = await response.text();
+        setError(errorMessage);
+        console.error("Login failed:", errorMessage);
         // Handle error, show a message to the user, etc.
       }
     } catch (error) {
+      setError("An unexpected error occurred during login.");
       console.error("Error during login:", error);
       // Handle error, show a message to the user, etc.
     }
@@ -97,6 +112,7 @@ const Login = () => {
               type="password"
               name="password"
               value={formData.password}
+              onChange={handleInputChange}
               placeholder="******************"
             />
             <p className="text-red-500 text-xs italic">
@@ -104,11 +120,15 @@ const Login = () => {
             </p>
           </div>
 
+          {/* Render the error box conditionally */}
+          {error && <ErrorBox message={error} />}
+
           {/* Button and Register link */}
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
+              onClick={handleLogin}
             >
               Login
             </button>
