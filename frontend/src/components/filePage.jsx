@@ -6,6 +6,7 @@ const FilePage = () => {
   return (
     <div>
       <h2>File Page</h2>
+      fahkjfdhakjsfdhkjasfk
       {/* Add your file-related content here */}
     </div>
   );

@@ -24,11 +24,13 @@ import loginRoute from "./routes/login.js";
 import logoutRoute from "./routes/logout.js";
 import deatilsRoute from "./routes/details.js";
 import fileUploadRoute from "./routes/files.js";
+import folderRoute from "./routes/folder.js";
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/logout", logoutRoute);
 app.use("/details", deatilsRoute);
 app.use("/upload", fileUploadRoute);
+app.use("/folder", folderRoute);
 
 export default app;

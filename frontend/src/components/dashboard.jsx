@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "./sidebar";
-import FileManager from "./fileManager.jsx";
+import FileManager from "./folderManager.jsx";
 
 const dashboard = () => {
   return (
@@ -9,7 +9,7 @@ const dashboard = () => {
       <div className="flex justify-center items-center">
         <div
           className={
-            "bg-white ml-[25rem] min-h-[30rem] max-h-[50rem] overflow-auto min-w-[50rem]"
+            "bg-white ml-[25rem] min-h-[30rem] max-h-[50rem] overflow-auto min-w-[50rem] rounded-2xl"
           }
         >
           <FileManager />

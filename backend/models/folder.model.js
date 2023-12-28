@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const folderSchema = new mongoose.Schema({
   name: {
@@ -14,4 +14,4 @@ const folderSchema = new mongoose.Schema({
 
 const Folder = mongoose.model("Folder", folderSchema);
 
-module.exports = Folder;
+export default Folder;

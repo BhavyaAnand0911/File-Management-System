@@ -6,6 +6,7 @@ import Landing from "./components/landing.jsx";
 import Home from "./components/home.jsx";
 import Profile from "./components/profile.jsx";
 import Dashboard from "./components/dashboard.jsx";
+import Folders from "./components/folders.jsx";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/folders/:folderName" element={<Folders />} />
       </Routes>
     </Router>
   );
