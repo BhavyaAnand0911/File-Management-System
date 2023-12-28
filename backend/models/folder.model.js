@@ -6,8 +6,7 @@ const folderSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
 });
