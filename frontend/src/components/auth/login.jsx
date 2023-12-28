@@ -39,7 +39,7 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful:", data);
+        //console.log("Login successful:", data);
         // Handle storing tokens or redirecting to the next page
         localStorage.setItem("accessToken", data.accessToken);
         navigate("/home");

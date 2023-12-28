@@ -6,22 +6,58 @@ const FileManager = () => {
   const [folders, setFolders] = useState([]);
   const [currentFolder, setCurrentFolder] = useState(null);
   const [newFolderName, setNewFolderName] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          console.error("Access token not found");
+          return;
+        }
+
+        const response = await fetch("http://localhost:6500/details", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": accessToken,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          console.error("Error fetching user details:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
 
   const handleAddFolder = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      console.error("Access token not found");
+      return;
+    }
     if (newFolderName.trim() !== "") {
       try {
-        // Assuming you store the token in localStorage with the key 'accessToken'
-        const token = localStorage.getItem("accessToken");
-        console.log(token);
         const response = await fetch("http://localhost:6500/folder", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": token,
+            "x-auth-token": accessToken,
           },
-          body: JSON.stringify({ name: newFolderName }),
+          body: JSON.stringify({ name: newFolderName, owner: user.username }),
         });
-        console.log(response);
+
         if (response.ok) {
           const folder = await response.json();
           setFolders([...folders, folder]);
