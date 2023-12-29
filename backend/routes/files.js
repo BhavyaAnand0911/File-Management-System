@@ -22,10 +22,11 @@ router.post("/", authMiddleware, upload.single("file"), async (req, res) => {
     //console.log(req.file.path);
 
     const savedFile = await newFile.save();
-    console.log(savedFile.path);
+    console.log(" file", req.file);
 
     // Upload file to Cloudinary
-    const fileUri = getDataUri(savedFile);
+    const fileUri = getDataUri(req.file);
+    console.log(fileUri);
     const cloudinaryResponse = await uploadOnCloudinary(fileUri);
     console.log("Cloudinary Response:", cloudinaryResponse);
 

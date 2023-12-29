@@ -1,28 +1,33 @@
 import { v2 as cloudinaryV2 } from "cloudinary";
 
-import fs from "fs";
-import { resolve } from "path";
-
 async function initializeCloudinary() {
   cloudinaryV2.config({
-    cloud_name: "your_cloud_name",
-    api_key: "your_api_key",
-    api_secret: "your_api_secret",
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
   });
 }
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (dataUriObject) => {
   try {
-    console.log("Local File Path:", localFilePath);
-    if (!localFilePath) console.log("Path not found");
-
-    // Upload on Cloudinary
     await initializeCloudinary();
-    console.log("Cloudinary Configuration:", cloudinaryV2.config());
 
-    const response = await new Promise((resolve, reject) => {
-      cloudinaryV2.v2.uploader.upload(localFilePath);
-    });
+    // Extract base64 content
+    const base64Content = dataUriObject.base64;
+
+    if (!base64Content) {
+      console.error("Invalid Data URI format");
+      return null;
+    }
+
+    const response = await cloudinaryV2.uploader.upload(
+      `data:image/png;base64,${base64Content}`,
+      {
+        // Add additional options as needed
+        folder: "DEMO", // Change to your desired folder
+        use_filename: true,
+      }
+    );
 
     console.log("Cloudinary API Response:", response);
 
@@ -35,7 +40,6 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error.message);
-    fs.unlinkSync(localFilePath); // Remove the locally saved temp file
     return null;
   }
 };
