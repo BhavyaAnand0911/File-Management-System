@@ -1,24 +1,17 @@
 import express from "express";
-import multer from "multer";
-import path from "path";
 import File from "../models/file.model.js";
+import upload from "../utils/multerMiddleware.js";
+import authMiddleware from "../utils/authMiddleware.js";
+import uploadOnCloudinary from "../utils/couldinary.service.js";
+import getDataUri from "../utils/dataUri.js";
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+router.get("/", (req, res) => {
+  res.send("working");
 });
-
-const upload = multer({ storage: storage });
-// router.get("/", (req, res) => {
-//   res.send("Upload");
-// });
-router.post("/", upload.single("file"), async (req, res) => {
+router.post("/", authMiddleware, upload.single("file"), async (req, res) => {
   try {
+    // Save file data to MongoDB
     const newFile = new File({
       filename: req.file.filename,
       path: req.file.path,
@@ -26,12 +19,32 @@ router.post("/", upload.single("file"), async (req, res) => {
       folder: req.body.folder,
     });
 
-    const savedFile = await newFile.save();
+    //console.log(req.file.path);
 
-    res.status(201).json(savedFile);
+    const savedFile = await newFile.save();
+    console.log(savedFile.path);
+
+    // Upload file to Cloudinary
+    const fileUri = getDataUri(savedFile);
+    const cloudinaryResponse = await uploadOnCloudinary(fileUri);
+    console.log("Cloudinary Response:", cloudinaryResponse);
+
+    // Check if the Cloudinary upload was successful
+    if (cloudinaryResponse) {
+      savedFile.cloudinaryUrl = cloudinaryResponse.url;
+      await savedFile.save();
+
+      res.status(201).json({
+        message: "File uploaded successfully",
+        cloudinaryUrl: cloudinaryResponse.url,
+      });
+    } else {
+      // Handle Cloudinary upload failure
+      res.status(500).json({ message: "Cloudinary upload failed" });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
