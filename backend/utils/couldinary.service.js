@@ -23,8 +23,8 @@ const uploadOnCloudinary = async (dataUriObject) => {
     const response = await cloudinaryV2.uploader.upload(
       `data:image/png;base64,${base64Content}`,
       {
-        // Add additional options as needed
-        folder: "DEMO", // Change to your desired folder
+        resource_type: "raw",
+        folder: "DEMO",
         use_filename: true,
       }
     );

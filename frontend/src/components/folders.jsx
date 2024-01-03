@@ -1,21 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
-  const [owner, setOwner] = useState("");
+  const [user, setUser] = useState(null);
   const [folder, setFolder] = useState("");
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  const params = useParams();
+  console.log("This is params", params);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
+  const fetchUserDetails = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+
+      if (!accessToken) {
+        console.error("Access token not found");
+        return;
+      }
+
+      const response = await fetch("http://localhost:6500/details", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": accessToken,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.username);
+        setUser(data);
+      } else {
+        console.error("Error fetching user details:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
+
   const handleUpload = async () => {
     try {
       const formData = new FormData();
+      console.log("This is the owner name", user.username);
       formData.append("file", file);
-      formData.append("owner", owner);
-      formData.append("folder", folder);
+      formData.append("owner", user.username);
+      formData.append("folder", params.folderName);
 
       const accessToken = localStorage.getItem("accessToken");
 
@@ -50,24 +88,6 @@ const FileUpload = () => {
       <div>
         <label htmlFor="file">Choose a file:</label>
         <input type="file" id="file" onChange={handleFileChange} />
-      </div>
-      <div>
-        <label htmlFor="owner">Owner:</label>
-        <input
-          type="text"
-          id="owner"
-          value={owner}
-          onChange={(e) => setOwner(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="folder">Folder:</label>
-        <input
-          type="text"
-          id="folder"
-          value={folder}
-          onChange={(e) => setFolder(e.target.value)}
-        />
       </div>
       <button className="bg-green-500" onClick={handleUpload}>
         Upload
