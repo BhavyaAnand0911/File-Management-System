@@ -24,7 +24,7 @@ const uploadOnCloudinary = async (dataUriObject) => {
       `data:image/png;base64,${base64Content}`,
       {
         resource_type: "raw",
-        folder: "DEMO",
+        folder: "FMS",
         use_filename: true,
       }
     );

@@ -18,6 +18,9 @@ const fileSchema = new mongoose.Schema(
     folder: {
       type: String,
     },
+    cloudinaryUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
