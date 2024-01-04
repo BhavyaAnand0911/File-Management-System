@@ -12,7 +12,6 @@ router.get("/files", authMiddleware, async (req, res) => {
     const currentUser = req.query.username;
     const folderName = req.query.folder;
 
-    // Fetch files for the current user and folder
     const files = await File.find({
       owner: currentUser,
       folder: folderName,
@@ -38,9 +37,9 @@ router.post("/", authMiddleware, upload.single("file"), async (req, res) => {
     console.log("File saved to MongoDB:", savedFile);
 
     const fileUri = getDataUri(req.file);
-    console.log(fileUri);
+    //console.log(fileUri);
     const cloudinaryResponse = await uploadOnCloudinary(fileUri);
-    console.log("Cloudinary Response:", cloudinaryResponse);
+    //console.log("Cloudinary Response:", cloudinaryResponse);
 
     if (cloudinaryResponse && cloudinaryResponse.url) {
       savedFile.cloudinaryUrl = cloudinaryResponse.url;

@@ -11,7 +11,6 @@ const getDataUri = (file) => {
 
     const extName = path.extname(filePath).toString();
 
-    // Create a data URI
     const dataUri = parser.format(extName, fileBuffer);
     return dataUri;
   } catch (error) {

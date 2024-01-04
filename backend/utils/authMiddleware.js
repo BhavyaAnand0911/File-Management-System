@@ -1,7 +1,7 @@
 // middleware/auth.js
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
-import User from "../models/user.model.js"; // Assuming you have your User model
+import User from "../models/user.model.js";
 
 const verifyToken = promisify(jwt.verify);
 
@@ -20,7 +20,6 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ error: "Invalid access token" });
     }
 
-    // Attach the user to the request object for further use in the route
     req.user = user;
 
     next();

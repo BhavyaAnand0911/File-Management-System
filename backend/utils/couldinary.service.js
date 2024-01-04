@@ -12,7 +12,6 @@ const uploadOnCloudinary = async (dataUriObject) => {
   try {
     await initializeCloudinary();
 
-    // Extract base64 content
     const base64Content = dataUriObject.base64;
 
     if (!base64Content) {
@@ -29,7 +28,7 @@ const uploadOnCloudinary = async (dataUriObject) => {
       }
     );
 
-    console.log("Cloudinary API Response:", response);
+    //console.log("Cloudinary API Response:", response);
 
     if (response && response.url) {
       console.log("File uploaded successfully on Cloudinary", response.url);

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
-    email: "", // Add the missing email field to the state
+    email: "",
     password: "",
   });
 
@@ -40,19 +40,16 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         //console.log("Login successful:", data);
-        // Handle storing tokens or redirecting to the next page
         localStorage.setItem("accessToken", data.accessToken);
         navigate("/home");
       } else {
         const errorMessage = await response.text();
         setError(errorMessage);
         console.error("Login failed:", errorMessage);
-        // Handle error, show a message to the user, etc.
       }
     } catch (error) {
       setError("An unexpected error occurred during login.");
       console.error("Error during login:", error);
-      // Handle error, show a message to the user, etc.
     }
   };
 
@@ -120,10 +117,8 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Render the error box conditionally */}
           {error && <ErrorBox message={error} />}
 
-          {/* Button and Register link */}
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-outline"

@@ -7,6 +7,8 @@ const Files = () => {
   const [files, setFiles] = useState([]);
   const [user, setUser] = useState(null);
   const [currentFolder, setCurrentFolder] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortCriteria, setSortCriteria] = useState("name");
 
   const params = useParams();
 
@@ -80,12 +82,60 @@ const Files = () => {
     if (user && params.folderName) {
       fetchFiles();
     }
-  }, [user, params.folderName]);
+  }, [user, params.folderName, searchTerm, sortCriteria]);
+
+  const filteredAndSortedFiles = () => {
+    let filteredFiles = files;
+
+    // Apply search filter
+    if (searchTerm) {
+      const searchTermLowerCase = searchTerm.toLowerCase();
+      filteredFiles = filteredFiles.filter((file) =>
+        file.filename.toLowerCase().includes(searchTermLowerCase)
+      );
+    }
+
+    // Apply sorting
+    if (sortCriteria === "name") {
+      filteredFiles.sort((a, b) => a.filename.localeCompare(b.filename));
+    } else if (sortCriteria === "timestamp") {
+      filteredFiles.sort((a, b) => a.timestamp - b.timestamp);
+    }
+
+    return filteredFiles;
+  };
 
   return (
-    <div className="grid grid-cols-6 gap-4">
-      {files.length > 0 ? (
-        files.map((file) => (
+    <div>
+      <div className="mb-3 mr-5 flex justify-center items-center">
+        <label htmlFor="search" className="text-xl font-semibold">
+          Search :
+        </label>
+        <input
+          type="text"
+          id="search"
+          value={searchTerm}
+          placeholder="Enter file name"
+          className="p-2 ml-3 bg-gray-100 rounded-md"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="mb-5 mr-5">
+        <label htmlFor="sort" className="text-xl font-semibold">
+          Sort by:
+        </label>
+        <select
+          id="sort"
+          value={sortCriteria}
+          className="ml-3"
+          onChange={(e) => setSortCriteria(e.target.value)}
+        >
+          <option value="name">Name</option>
+          <option value="timestamp">Timestamp</option>
+        </select>
+      </div>
+      <div className="grid grid-cols-6 gap-4">
+        {filteredAndSortedFiles().map((file) => (
           <div key={file._id} className="p-4 border border-gray-300 rounded">
             <a
               href={file.cloudinaryUrl}
@@ -95,12 +145,8 @@ const Files = () => {
               {file.filename}
             </a>
           </div>
-        ))
-      ) : (
-        <p className="col-span-6">
-          No files found in the current folder ({currentFolder}).
-        </p>
-      )}
+        ))}
+      </div>
     </div>
   );
 };
@@ -183,11 +229,10 @@ const FileUpload = () => {
       console.log("File uploaded successfully", data);
       setFile(null);
 
-      // Show success notification
       setShowSuccessNotification(true);
       toast.success("File uploaded successfully", {
-        autoClose: 3000, // Close the notification after 3 seconds
-        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 4000, // Close the notification after 3 seconds
+        position: toast.POSITION.BOTTOM_RIGHT,
       });
     } catch (error) {
       console.error("Error uploading file", error);
@@ -195,7 +240,7 @@ const FileUpload = () => {
   };
 
   return (
-    <>
+    <div className="bg-gray-400 min-h-screen">
       <div className=" flex flex-col justify-center items-center">
         <h1 className="mt-10 mb-10 text-4xl font-bold">File Upload</h1>
         <div className="mb-10 p-5">
@@ -220,9 +265,9 @@ const FileUpload = () => {
       <div className="mt-20 p-10">
         <Files />
       </div>
-      {/* ToastContainer for displaying notifications */}
+
       <ToastContainer />
-    </>
+    </div>
   );
 };
 

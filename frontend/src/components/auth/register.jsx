@@ -40,18 +40,15 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Registration successful:", data);
-        // Handle storing tokens or redirecting to the next page
         navigate("/login");
       } else {
         const errorMessage = await response.text();
         setError(errorMessage);
         console.error("Registration failed:", errorMessage);
-        // You can choose to handle error state here, show a message to the user, etc.
       }
     } catch (error) {
       setError("An unexpected error occurred during registration.");
       console.error("Error during registration:", error);
-      // You can choose to handle error state here, show a message to the user, etc.
     }
   };
 
@@ -119,7 +116,6 @@ const Register = () => {
             </p>
           </div>
 
-          {/* Render the error box conditionally */}
           {error && <ErrorBox message={error} />}
 
           {/* Button and Forgot Password link */}
