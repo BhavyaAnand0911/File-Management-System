@@ -32,7 +32,7 @@ Welcome to the FIle Management System repository! This project aims to provide u
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/BhavyaAnand0911/File-Management-System.git
 2. Install Dependencies
    ```bash
    npm install
